@@ -28,20 +28,27 @@ thunder.init((error) => {
 function getEnvironmentalSensing(device) {
     device.getEnvironmentalSensing((error, res) => {
       // Show the data
-      client.publish('dse-i2400/hao/bedroom/Latitude', Latitude)
-      client.publish('dse-i2400/hao/bedroom/Longitude', Longitude)
-      client.publish('dse-i2400/hao/bedroom/Temperature', res.temperature.toString())
-      client.publish('dse-i2400/hao/bedroom/Pressure', res.pressure.toString())
-      client.publish('dse-i2400/hao/bedroom/Humidity', res.humidity.toString())
-      client.publish('dse-i2400/hao/bedroom/UV_Index', res.uvIndex.toString())
-      client.publish('dse-i2400/hao/bedroom/Light', res.light.toString())
-      client.publish('dse-i2400/hao/bedroom/Sound', res.sound.toString())
+
+      client.publish('dsei2400/hao/bedroom', JSON.stringify({
+        ...res,
+        latitude: Latitude,
+        longitude: Longitude
+      }))
+
+      // client.publish('dse-i2400/hao/bedroom/Latitude', Latitude)
+      // client.publish('dse-i2400/hao/bedroom/Longitude', Longitude)
+      // client.publish('dse-i2400/hao/bedroom/Temperature', res.temperature.toString())
+      // client.publish('dse-i2400/hao/bedroom/Pressure', res.pressure.toString())
+      // client.publish('dse-i2400/hao/bedroom/Humidity', res.humidity.toString())
+      // client.publish('dse-i2400/hao/bedroom/UV_Index', res.uvIndex.toString())
+      // client.publish('dse-i2400/hao/bedroom/Light', res.light.toString())
+      // client.publish('dse-i2400/hao/bedroom/Sound', res.sound.toString())
     });
   }
 
   client.on('connect', () => {
     console.log('- Connected Status: ' + client.connected);
-    client.subscribe('dse-i2400/hao/bedroom/#');
+    client.subscribe('dsei2400/hao/bedroom/#');
   })
   
   client.on('message', (topic, message) => {
